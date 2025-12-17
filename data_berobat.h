@@ -6,7 +6,34 @@
 using namespace std;
 
 // Data Pasien (Child)
+struct Pasien {
+    string nama_pasien;
+    int umur;
+    string keluhan;
+    int jumlah_dokter; // maksimal 5 dokter
+};
 
+typedef struct elmPasien* adrPasien;
+
+struct elmPasien {
+    Pasien info;
+    adrPasien next;
+    adrPasien prev;
+};
+
+struct ListPasien {
+    adrPasien first;
+    adrPasien last;
+};
+
+// Manajemen Pasien
+void createListPasien(ListPasien &L);
+adrPasien alokasiPasien(string nama, int umur, string keluhan);
+void insertLastPasien(ListPasien &L, adrPasien P);
+void insertFirstPasien(ListPasien &L, adrPasien &P);
+void deletePasien(ListPasien &L, string nama);
+adrPasien findPasien(ListPasien L, string nama);
+void showAllPasien(ListPasien L);
 
 
 // Data Dokter (Parent)
