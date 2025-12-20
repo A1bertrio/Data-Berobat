@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 
-// Data Pasien (Child)
+// Data Pasien (Child) - Single Linked List
 struct Pasien {
     string nama_pasien;
     int umur;
@@ -18,25 +18,22 @@ typedef struct elmPasien* adrPasien;
 struct elmPasien {
     Pasien info;
     adrPasien next;
-    adrPasien prev;
 };
 
 struct ListPasien {
     adrPasien first;
-    adrPasien last;
 };
 
 // Manajemen Pasien
 void createListPasien(ListPasien &L);
 adrPasien alokasiPasien(string nama, int umur, string keluhan);
-void insertLastPasien(ListPasien &L, adrPasien P);
-void insertFirstPasien(ListPasien &L, adrPasien &P);
-void deletePasien(ListPasien &L, string nama);
+void insertFirstPasien(ListPasien &L, adrPasien P);
+void deletePasien(ListPasien &LP, ListDokter &LD, string nama); // menghapus pasien dari list pasien beserta relasinya pada semua dokter
 adrPasien findPasien(ListPasien L, string nama);
-void showAllPasien(ListPasien L);
+void showAllPasienWithDokter(ListPasien LP, ListDokter LD); // f. menampilkan semua pasien beserta dokternya
 
 
-// Data Dokter (Parent)
+// Data Dokter (Parent) - Double Linked List
 struct Dokter {
     string nama_dokter;
     string spesialisasi;
@@ -49,7 +46,7 @@ struct elmDokter {
     Dokter info;
     adrDokter next;
     adrDokter prev;
-    adrRelasi firstRelasi; 
+    adrRelasi firstRelasi; // head dari list relasi
 };
 
 struct ListDokter {
@@ -57,34 +54,26 @@ struct ListDokter {
     adrDokter last;
 };
 
-// Data Relasi
+// Data Relasi - Single Linked List
 typedef struct elmRelasi *adrRelasi;
 struct elmRelasi {
     adrRelasi next;
-    adrRelasi child;
+    adrPasien child; // pointer ke data pasien (child)
 };
 
 // Manajemen Dokter
 void createListDokter(ListDokter &L);
 adrDokter alokasiDokter(string nama, string spesialisasi);
 void insertLastDokter(ListDokter &L, adrDokter P);
-void insertFirstDokter(ListDokter &L, adrDokter &P);
-void deleteDokter(ListDokter &L, string nama);
-adrDokter findDokter(ListDokter L, string nama);
+void deleteDokter(ListDokter &L, string nama); // menghapus dokter beserta semua relasinya
+adrDokter findDokter(ListDokter L, string nama); 
 void showAllDokter(ListDokter L);
 
-// Manajemen Pasien
-
-
-
 // Manajemen Relasi
-void connectPasienToDokter(ListDokter &LD, ListPasien &LP, string namaDokter, string namaPasien);
-void showAllData (ListDokter LD);
-
-//Mencari data child (pasien) pada parent tertentu
-
-//Menghapus data child (pasien) pada parent tertentu
-
-// Menghitung jumlah data child dari parent tertentu
+void connect(ListDokter &LD, ListPasien &LP, string namaDokter, string namaPasien); // c. connect parent dengan child (dan sebaliknya)
+void showPasienByDokter (ListDokter LD, string namaDokter); // g. Menampilkan data pasien yang ditangani dokter tertentu
+void showDokterByPasien (ListDokter LD, ListPasien LP, string namaPasien); // h. Menampilkan data dokter yang menangani pasien tertentu
+void showDokterSibuk (ListDokter LD); // i. Menampilkan data dokter yang tidak sibuk dan yang paling sibuk
+void showAllData (ListDokter LD); // menampilkan semua data dokter beserta pasiennya
 
 #endif
