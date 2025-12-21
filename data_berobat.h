@@ -5,33 +5,15 @@
 #include <string>
 using namespace std;
 
-// Data Pasien (Child) - Single Linked List
-struct Pasien {
-    string nama_pasien;
-    int umur;
-    string keluhan;
-    int jumlah_dokter; // maksimal 5 dokter
+struct elmPasien;
+typedef elmPasien* adrPasien;
+
+// Data Relasi - Single Linked List
+typedef struct elmRelasi *adrRelasi;
+struct elmRelasi {
+    adrRelasi next;
+    adrPasien child; // pointer ke data pasien (child)
 };
-
-typedef struct elmPasien* adrPasien;
-
-struct elmPasien {
-    Pasien info;
-    adrPasien next;
-};
-
-struct ListPasien {
-    adrPasien first;
-};
-
-// Manajemen Pasien
-void createListPasien(ListPasien &L);
-adrPasien alokasiPasien(string nama, int umur, string keluhan);
-void insertFirstPasien(ListPasien &L, adrPasien P);
-void deletePasien(ListPasien &LP, ListDokter &LD, string nama); // menghapus pasien dari list pasien beserta relasinya pada semua dokter
-adrPasien findPasien(ListPasien L, string nama);
-void showAllPasienWithDokter(ListPasien LP, ListDokter LD); // f. menampilkan semua pasien beserta dokternya
-
 
 // Data Dokter (Parent) - Double Linked List
 struct Dokter {
@@ -53,12 +35,25 @@ struct ListDokter {
     adrDokter first;
     adrDokter last;
 };
+// Data Pasien (Child) - Single Linked List
+struct Pasien {
+    string nama_pasien;
+    int umur;
+    string keluhan;
+    int jumlah_dokter; // maksimal 5 dokter
+};
 
-// Data Relasi - Single Linked List
-typedef struct elmRelasi *adrRelasi;
-struct elmRelasi {
-    adrRelasi next;
-    adrPasien child; // pointer ke data pasien (child)
+
+
+struct elmPasien {
+    Pasien info;
+    adrPasien next;
+    adrPasien prev;  
+};
+
+struct ListPasien {
+    adrPasien first;
+    adrPasien last;
 };
 
 // Manajemen Dokter
@@ -75,5 +70,13 @@ void showPasienByDokter (ListDokter LD, string namaDokter); // g. Menampilkan da
 void showDokterByPasien (ListDokter LD, ListPasien LP, string namaPasien); // h. Menampilkan data dokter yang menangani pasien tertentu
 void showDokterSibuk (ListDokter LD); // i. Menampilkan data dokter yang tidak sibuk dan yang paling sibuk
 void showAllData (ListDokter LD); // menampilkan semua data dokter beserta pasiennya
+
+// Manajemen Pasien
+void createListPasien(ListPasien &L);
+adrPasien alokasiPasien(string nama, int umur, string keluhan);
+void insertFirstPasien(ListPasien &L, adrPasien P);
+adrPasien findPasien(ListPasien L, string nama);
+void deletePasien(ListPasien &LP, ListDokter &LD, string nama);
+void showAllPasienWithDokter(ListPasien LP, ListDokter LD);
 
 #endif

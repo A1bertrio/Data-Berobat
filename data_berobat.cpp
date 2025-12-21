@@ -6,6 +6,10 @@ void createListDokter(ListDokter &L) {
 }
 
 // createListPasien
+void createListPasien(ListPasien &L) {
+    L.first = nullptr;
+    L.last = nullptr;
+}
 
 adrDokter alokasiDokter(string nama, string spesialisasi) {
     adrDokter P = new elmDokter;
@@ -19,6 +23,16 @@ adrDokter alokasiDokter(string nama, string spesialisasi) {
 }
 
 // alokasiPasien
+adrPasien alokasiPasien(string nama, int umur, string keluhan) {
+    adrPasien P = new elmPasien;
+    P->info.nama_pasien = nama;
+    P->info.umur = umur;
+    P->info.keluhan = keluhan;
+    P->info.jumlah_dokter = 0;
+    P->next = nullptr;
+    P->prev = nullptr;
+    return P;
+}
 
 // a. Penambahan Dokter (Instert Last)
 void insertLastDokter(ListDokter &L, adrDokter P) {
@@ -33,6 +47,16 @@ void insertLastDokter(ListDokter &L, adrDokter P) {
 }
 
 // b. Penambahan Pasien (Insert First)
+void insertFirstPasien(ListPasien &L, adrPasien P) {
+    if (L.first == nullptr) {
+        L.first = P;
+        L.last = P;
+    } else {
+        P->next = L.first;
+        L.first->prev = P;
+        L.first = P;
+    }
+}
 
 adrDokter findDokter(ListDokter L, string nama) {
     adrDokter P = L.first;
@@ -46,6 +70,16 @@ adrDokter findDokter(ListDokter L, string nama) {
 }
 
 // find pasien
+adrPasien findPasien(ListPasien L, string nama) {
+    adrPasien P = L.first;
+    while (P != nullptr) {
+        if (P->info.nama_pasien == nama) {
+            return P;
+        }
+        P = P->next;
+    }
+    return nullptr;
+}
 
 // c. connect parent dengan child (dan sebaliknya)
 void connect(ListDokter &LD, ListPasien &LP, string namaDokter, string namaPasien) {
@@ -114,10 +148,111 @@ void deleteDokter(ListDokter &L, string nama) {
 }
 
 // e. Menghapus data pasien tertentu beserta semua relasinya
+void deletePasien(ListPasien &LP, ListDokter &LD, string nama) {
+    adrPasien target = findPasien(LP, nama);
+    if (target == nullptr) {
+        cout << "Pasien tidak ditemukan.\n";
+        return;
+    }
+
+
+ // hapus relasi pasien dari semua dokter
+    adrDokter D = LD.first;
+    while (D != nullptr) {
+        adrRelasi R = D->firstRelasi;
+        adrRelasi prevR = nullptr;
+        while (R != nullptr) {
+            if (R->child == target) {
+                if (prevR == nullptr) {
+                    D->firstRelasi = R->next;
+                } else {
+                    prevR->next = R->next;
+                }
+                D->info.jumlah_pasien--;
+                adrRelasi temp = R;
+                R = R->next;
+                delete temp;
+                continue;
+            }
+            prevR = R;
+            R = R->next;
+        }
+        D = D->next;
+    }
+
+       // hapus node pasien dari list pasien
+    if (target == LP.first && target == LP.last) {
+        LP.first = nullptr;
+        LP.last = nullptr;
+    } else if (target == LP.first) {
+        LP.first = target->next;
+        if (LP.first != nullptr) LP.first->prev = nullptr;
+    } else if (target == LP.last) {
+        LP.last = target->prev;
+        if (LP.last != nullptr) LP.last->next = nullptr;
+    } else {
+        target->prev->next = target->next;
+        target->next->prev = target->prev;
+    }
+    delete target;
+    cout << "Pasien " << nama << " beserta semua relasinya telah dihapus.\n";
+}
+
 
 // f. Menampilkan semua pasien beserta dokternya
+void showAllPasienWithDokter(ListPasien LP, ListDokter LD) {
+    cout << "\n=== DAFTAR PASIEN ===\n";
+    adrPasien P = LP.first;
+    while (P != nullptr) {
+        cout << "\nPasien: " << P->info.nama_pasien
+             << " (Umur: " << P->info.umur
+             << ", Keluhan: " << P->info.keluhan << ")\n";
+        cout << "Jumlah Dokter: " << P->info.jumlah_dokter << "\n";
+        cout << "Daftar Dokter:\n";
+
+        bool adaDokter = false;
+        adrDokter D = LD.first;
+        while (D != nullptr) {
+            adrRelasi R = D->firstRelasi;
+            while (R != nullptr) {
+                if (R->child == P) {
+                    cout << "- Dr. " << D->info.nama_dokter
+                         << " (" << D->info.spesialisasi << ")\n";
+                    adaDokter = true;
+                }
+                R = R->next;
+            }
+            D = D->next;
+        }
+        if (!adaDokter) {
+            cout << "- Tidak ada dokter.\n";
+        }
+        P = P->next;
+    }
+}
 
 // g. Menampilkan data pasien yang ditangani dokter tertentu
+void showPasienByDokter(ListDokter LD, string namaDokter) {
+    adrDokter D = findDokter(LD, namaDokter);
+    if (!D) {
+        cout << "Dokter dengan nama " << namaDokter << " tidak ditemukan.\n";
+        return;
+    }
+
+    cout << "\n=== Pasien yang ditangani Dr. " << D->info.nama_dokter << " ===\n";
+    if (D->firstRelasi == nullptr) {
+        cout << "- Belum ada pasien.\n";
+        return;
+    }
+
+    // beda gaya: pakai for loop pointer
+    for (adrRelasi R = D->firstRelasi; R != nullptr; R = R->next) {
+        adrPasien P = R->child;
+        cout << "- " << P->info.nama_pasien
+             << " | Umur: " << P->info.umur
+             << " | Keluhan: " << P->info.keluhan << "\n";
+    }
+}
 
 // h. Menampilkan data dokter yang menangani pasien tertentu
 void showDokterByPasien (ListDokter LD, ListPasien LP, string namaPasien) {
@@ -202,3 +337,4 @@ void showAllData (ListDokter LD) {
         D = D->next;
     }
 }
+
