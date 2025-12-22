@@ -62,14 +62,13 @@ adrDokter alokasiDokter(string nama, string spesialisasi);
 void insertLastDokter(ListDokter &L, adrDokter P);
 void deleteDokter(ListDokter &L, string nama); // menghapus dokter beserta semua relasinya
 adrDokter findDokter(ListDokter L, string nama); 
-void showAllDokter(ListDokter L);
+void showAllDokter(ListDokter L); // ,emankan semua data dokter tanpa pasien
 
 // Manajemen Relasi
 void connect(ListDokter &LD, ListPasien &LP, string namaDokter, int idPasien); // c. connect parent dengan child (dan sebaliknya)
 void showPasienByDokter (ListDokter LD, string namaDokter); // g. Menampilkan data pasien yang ditangani dokter tertentu
 void showDokterByPasien(ListDokter LD, ListPasien LP, int idPasien); // h. Menampilkan data dokter yang menangani pasien tertentu
 void showDokterSibuk (ListDokter LD); // i. Menampilkan data dokter yang tidak sibuk dan yang paling sibuk
-void showAllData (ListDokter LD); // menampilkan semua data dokter beserta pasiennya
 
 // Manajemen Pasien
 void createListPasien(ListPasien &L);

@@ -308,22 +308,14 @@ void showDokterSibuk (ListDokter LD) {
 }
 
 // menampilkan dokter tanpa pasien
-void showAllData (ListDokter LD) {
+void showAllDokter (ListDokter L) {
     cout << "\n=== DAFTAR DOKTER ===\n";
-    adrDokter D = LD.first;
+    adrDokter D = L.first;
     while (D != nullptr) {
-        cout << "\nDr. " << D->info.nama_dokter << " (" << D->info.spesialisasi << ")\n";
-        cout << "Jumlah Pasien: " << D->info.jumlah_pasien << "\n";
-        cout << "Daftar Pasien:\n";
-        adrRelasi R = D->firstRelasi;
-        if (R == nullptr) {
-            cout << "- Tidak ada pasien.\n";
-        } else {
-            while (R != nullptr) {
-                cout << "- " << R->child->info.nama_pasien << " (Umur: " << R->child->info.umur << ", Keluhan: " << R->child->info.keluhan << ")\n";
-                R = R->next;
-            }
-        }
+        cout << "Nama Dokter: " << D->info.nama_dokter << endl;
+        cout << "Spesialisasi: " << D->info.spesialisasi << endl;
+        cout << "Jumlah pasien: " << D->info.jumlah_pasien << endl;
+        cout << "-----------------------------" << endl;
         D = D->next;
     }
 }
