@@ -36,24 +36,24 @@ struct ListDokter {
     adrDokter last;
 };
 // Data Pasien (Child) - Single Linked List
-struct Pasien {
-    string nama_pasien;
+struct infotypePasien {
+    string nama_pasien;   
+    int id;
     int umur;
-    string keluhan;
-    int jumlah_dokter; // maksimal 5 dokter
+    string keluhan;       
+    int jumlah_dokter;    
 };
+
 
 
 
 struct elmPasien {
-    Pasien info;
+    infotypePasien info;
     adrPasien next;
-    adrPasien prev;  
 };
 
 struct ListPasien {
     adrPasien first;
-    adrPasien last;
 };
 
 // Manajemen Dokter
@@ -65,18 +65,18 @@ adrDokter findDokter(ListDokter L, string nama);
 void showAllDokter(ListDokter L);
 
 // Manajemen Relasi
-void connect(ListDokter &LD, ListPasien &LP, string namaDokter, string namaPasien); // c. connect parent dengan child (dan sebaliknya)
+void connect(ListDokter &LD, ListPasien &LP, string namaDokter, int idPasien); // c. connect parent dengan child (dan sebaliknya)
 void showPasienByDokter (ListDokter LD, string namaDokter); // g. Menampilkan data pasien yang ditangani dokter tertentu
-void showDokterByPasien (ListDokter LD, ListPasien LP, string namaPasien); // h. Menampilkan data dokter yang menangani pasien tertentu
+void showDokterByPasien(ListDokter LD, ListPasien LP, int idPasien); // h. Menampilkan data dokter yang menangani pasien tertentu
 void showDokterSibuk (ListDokter LD); // i. Menampilkan data dokter yang tidak sibuk dan yang paling sibuk
 void showAllData (ListDokter LD); // menampilkan semua data dokter beserta pasiennya
 
 // Manajemen Pasien
 void createListPasien(ListPasien &L);
-adrPasien alokasiPasien(string nama, int umur, string keluhan);
-void insertFirstPasien(ListPasien &L, adrPasien P);
-adrPasien findPasien(ListPasien L, string nama);
-void deletePasien(ListPasien &LP, ListDokter &LD, string nama);
+adrPasien alokasiPasien(string nama, int id, int umur);
+void insertPasien(ListPasien &L, adrPasien P);
+adrPasien findPasien(ListPasien L, int id);
+void deletePasien(ListPasien &LP, ListDokter &LD, int id);
 void showAllPasienWithDokter(ListPasien LP, ListDokter LD);
 
 #endif
