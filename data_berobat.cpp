@@ -5,7 +5,6 @@ void createListDokter(ListDokter &L) {
     L.last = nullptr;
 }
 
-// createListPasien
 void createListPasien(ListPasien &L) {
     L.first = nullptr;
 }
